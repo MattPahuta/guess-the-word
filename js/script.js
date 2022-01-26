@@ -16,7 +16,7 @@ const addPlaceholders = (word) => {
   const placeholderLetters = [];
 
   for (let letter of word) {
-    console.log(letter);
+    // console.log(letter);
     placeholderLetters.push('●');
   }
   wordInProgress.innerText = placeholderLetters.join('');
@@ -46,7 +46,43 @@ const makeGuess = (letter) => {
     message.innerText = `Letter "${letter}" has already been guessed. Try again!`;
   } else {
     guessedLetters.push(letter);
-    console.log(guessedLetters);
+    console.log(`guessedLetters is: ${guessedLetters}`);
+    showGuessedLetters();
+    updateWordInProgress(guessedLetters);
+  }
+};
+
+// update game page with letters player guesses
+const showGuessedLetters = () => {
+  guessedLettersUL.innerHTML = ''; // clear the guessedLettersUL
+  for (let letter of guessedLetters) { // loop through guessedLetters array
+    const li = document.createElement('li'); // create an li
+    li.innerText = letter; // add letter as li content
+    guessedLettersUL.append(li); // append the li to the UL
+  }
+};
+
+const updateWordInProgress = (gussedLetters) => {
+  const wordUpper = word.toUpperCase(); // change word to upper case
+  const wordArray = wordUpper.split(''); // split the upper case word into an array of letters
+  console.log(`wordArray is: ${wordArray}`);
+  const revealWord = [];
+
+  for (let letter of wordArray) {
+    if (guessedLetters.includes(letter)) {
+      revealWord.push(letter.toUpperCase());
+    } else {
+      revealWord.push('●')
+    }
+  }
+  wordInProgress.innerText = revealWord.join('');
+  checkWin();
+};
+
+const checkWin = () => {
+  if (word.toUpperCase() === wordInProgress.innerText) { // change wordIn.innerText to a variable?
+    message.classList.add('win');
+    message.innerHTML = `<p class="highlight">You guessed the correct word! Congrats!</p>`;
   }
 };
 
